@@ -17,7 +17,7 @@ To build a docker image containing the calc service run the following:\
 Requires Helm.
 
 To deploy using the default docker image sajfer/goacalc run: \
-``` helm upgrade --install <deployment name> ./chart```
+``` helm upgrade --install goacalc ./chart```
 
 ### To access the service once deployed
 To be able to access the service use the following commands:\
