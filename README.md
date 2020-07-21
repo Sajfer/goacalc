@@ -2,7 +2,7 @@
 
 
 ## Build
-Building without docker \
+Building without docker
 ``` 
 goa gen calcsvc/design
 cd cmd/calc
