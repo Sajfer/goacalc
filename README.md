@@ -2,6 +2,13 @@
 
 
 ## Build
+Building without docker \
+``` 
+goa gen calcsvc/design
+cd cmd/calc
+go build
+ ```
+
 To build a docker image containing the calc service run the following:\
 ```docker build -t <your tag> .```
 
@@ -16,6 +23,7 @@ To deploy using the default docker image sajfer/goacalc run: \
 To be able to access the service use the following commands:\
 ```
 export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=chart,app.kubernetes.io/instance=goacalc" -o jsonpath="{.items[0].metadata.name}")
+
 kubectl --namespace default port-forward $POD_NAME 5000:5000
 ```
 This will portforward localhost port 5000 to the kubernetes service.
