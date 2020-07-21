@@ -20,6 +20,10 @@ type Client struct {
 	// Add Doer is the HTTP client used to make requests to the add endpoint.
 	AddDoer goahttp.Doer
 
+	// Healthcheck Doer is the HTTP client used to make requests to the healthcheck
+	// endpoint.
+	HealthcheckDoer goahttp.Doer
+
 	// RestoreResponseBody controls whether the response bodies are reset after
 	// decoding so they can be read again.
 	RestoreResponseBody bool
@@ -41,6 +45,7 @@ func NewClient(
 ) *Client {
 	return &Client{
 		AddDoer:             doer,
+		HealthcheckDoer:     doer,
 		RestoreResponseBody: restoreBody,
 		scheme:              scheme,
 		host:                host,
@@ -63,6 +68,25 @@ func (c *Client) Add() goa.Endpoint {
 		resp, err := c.AddDoer.Do(req)
 		if err != nil {
 			return nil, goahttp.ErrRequestError("calc", "add", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// Healthcheck returns an endpoint that makes HTTP requests to the calc service
+// healthcheck server.
+func (c *Client) Healthcheck() goa.Endpoint {
+	var (
+		decodeResponse = DecodeHealthcheckResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v interface{}) (interface{}, error) {
+		req, err := c.BuildHealthcheckRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.HealthcheckDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("calc", "healthcheck", err)
 		}
 		return decodeResponse(resp)
 	}

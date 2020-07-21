@@ -6,6 +6,18 @@ info:
 servers:
 - url: localhost:5000
 paths:
+  /:
+    get:
+      tags:
+      - calc
+      summary: healthcheck calc
+      operationId: calc#healthcheck
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              example: {}
   /add/{a}/{b}:
     get:
       tags:

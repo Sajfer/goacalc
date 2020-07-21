@@ -23,7 +23,7 @@ import (
 //    command (subcommand1|subcommand2|...)
 //
 func UsageCommands() string {
-	return `calc add
+	return `calc (add|healthcheck)
 `
 }
 
@@ -48,9 +48,12 @@ func ParseEndpoint(
 		calcAddFlags = flag.NewFlagSet("add", flag.ExitOnError)
 		calcAddAFlag = calcAddFlags.String("a", "REQUIRED", "Left operand")
 		calcAddBFlag = calcAddFlags.String("b", "REQUIRED", "Right operand")
+
+		calcHealthcheckFlags = flag.NewFlagSet("healthcheck", flag.ExitOnError)
 	)
 	calcFlags.Usage = calcUsage
 	calcAddFlags.Usage = calcAddUsage
+	calcHealthcheckFlags.Usage = calcHealthcheckUsage
 
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		return nil, nil, err
@@ -89,6 +92,9 @@ func ParseEndpoint(
 			case "add":
 				epf = calcAddFlags
 
+			case "healthcheck":
+				epf = calcHealthcheckFlags
+
 			}
 
 		}
@@ -117,6 +123,9 @@ func ParseEndpoint(
 			case "add":
 				endpoint = c.Add()
 				data, err = calcc.BuildAddPayload(*calcAddAFlag, *calcAddBFlag)
+			case "healthcheck":
+				endpoint = c.Healthcheck()
+				data = nil
 			}
 		}
 	}
@@ -135,6 +144,7 @@ Usage:
 
 COMMAND:
     add: Add implements add.
+    healthcheck: Healthcheck implements healthcheck.
 
 Additional help:
     %s calc COMMAND --help
@@ -149,5 +159,15 @@ Add implements add.
 
 Example:
     `+os.Args[0]+` calc add --a 5952269320165453119 --b 1828520165265779840
+`, os.Args[0])
+}
+
+func calcHealthcheckUsage() {
+	fmt.Fprintf(os.Stderr, `%s [flags] calc healthcheck
+
+Healthcheck implements healthcheck.
+
+Example:
+    `+os.Args[0]+` calc healthcheck
 `, os.Args[0])
 }

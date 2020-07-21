@@ -63,3 +63,12 @@ func DecodeAddRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Dec
 		return payload, nil
 	}
 }
+
+// EncodeHealthcheckResponse returns an encoder for responses returned by the
+// calc healthcheck endpoint.
+func EncodeHealthcheckResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, interface{}) error {
+	return func(ctx context.Context, w http.ResponseWriter, v interface{}) error {
+		w.WriteHeader(http.StatusOK)
+		return nil
+	}
+}
