@@ -1,5 +1,5 @@
 # goacalc
-
+Example project for creating a service in Kubernetes using Go and Helm.
 
 ## Build
 Building without docker
@@ -16,11 +16,11 @@ To build a docker image containing the calc service run the following:\
 
 Requires Helm.
 
-To deploy using the default docker image sajfer/goacalc run: \
+To deploy using the default docker image sajfer/goacalc:latest run: \
 ``` helm upgrade --install goacalc ./chart```
 
 ### To access the service once deployed
-To be able to access the service use the following commands:\
+To be able to access the service use the following commands:
 ```
 export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=chart,app.kubernetes.io/instance=goacalc" -o jsonpath="{.items[0].metadata.name}")
 
