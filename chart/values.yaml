@@ -6,9 +6,12 @@ replicaCount: 1
 
 image:
   repository: sajfer/goacalc
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
+
+args:
+  port: 5000
 
 imagePullSecrets: []
 nameOverride: ""
